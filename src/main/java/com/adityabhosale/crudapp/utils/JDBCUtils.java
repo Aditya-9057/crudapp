@@ -21,4 +21,3 @@ public class JDBCUtils {
     public static Connection fetchConnection() throws SQLException {
         return  DriverManager.getConnection(URL,USER,PASS);
     }
-}
