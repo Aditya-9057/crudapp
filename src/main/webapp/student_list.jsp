@@ -1,3 +1,4 @@
+<%@page language="java" import = "java.util.*,com.adityabhosale.crudapp.model.Student"%>
 <html>
     <head>
         <title>MVC CRUD APPLICATION</title>
@@ -7,7 +8,7 @@
         <h2>MVC CRUD APPLICATION</h2>
         <h5>SERVLET + JSP + JDBC</h5>
 
-        <a href="">Add Student</a>
+        <a href="students?action=add">Add Student</a>
         <table border="1" cellpading="8">
             <thead>
                 <tr>
@@ -21,40 +22,36 @@
             </thead>
 
             <tbody>
-                <!-- We will add content dynamically later -->
-                 <tr>
-                     <td>1</td>
-                     <td>Aditya</td>
-                     <td>aditya@gmail.com</td>
-                     <td>8888774944</td>
-                     <td>
-                        <a href="">Update</a>
-                        <a href="">Delete</a>
-                     </td>
+            <%
+                int cnt = 1;
+                List<Student> students = (List<Student>)request.getAttribute("students");
+                if(students !=null || !students.isEmpty()){
+                    for(Student s : students){
+            %>
 
-                 </tr>
-                  <tr>
-                      <td>2</td>
-                      <td>Adi</td>
-                      <td>adi@gmail.com</td>
-                      <td>8888774945</td>
-                      <td>
-                      <a href="">Update</a>
-                      <a href="">Delete</a>
-                      </td>
+                     <tr>
+                         <td><%= cnt++ %></td>
+                         <td><%=s.getName() %></td>
+                         <td><%=s.getEmail() %></td>
+                         <td><%=s.getMobile() %></td>
+                         <td>
+                            <a href="students?action=edit&id=<%= s.getId() %>">Update</a>
+                            <a href="students?action=delete&id=<%= s.getId() %>">Delete</a>
+                         </td>
 
-                  </tr>
-                   <tr>
-                       <td>3</td>
-                       <td>Adit</td>
-                       <td>adit@gmail.com</td>
-                       <td>8888774946</td>
-                       <td>
-                       <a href="">Update</a>
-                       <a href="">Delete</a>
-                       </td>
+                     </tr>
+            <%
+                    }
+                 } else {
+            %>
+                    <tr>
+                        <td>No Students Found</t>
+                    </tr>
+            <%
 
-                   </tr>
+                 }
+
+            %>
             </tbody>
         </table>
     </body>

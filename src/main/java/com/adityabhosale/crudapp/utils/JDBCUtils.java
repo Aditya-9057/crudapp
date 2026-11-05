@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class JDBCUtils {
-    private static final String URL = "jdbc:postgresql://localhost:3306/cruddb";
+    private static final String URL = "jdbc:postgresql://localhost:5433/cruddb";
     private static final String USER = "postgres";
     private static final String PASS = "root@123";
 
