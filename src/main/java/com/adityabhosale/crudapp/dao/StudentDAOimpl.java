@@ -13,8 +13,8 @@ import java.util.List;
 
 public class StudentDAOimpl implements StudentDAO {
     private static final String INSERT_SQL = "INSERT INTO student(name,email,mobile) VALUES(?,?,?)";
-    private static final String UPDATE_SQL = "DELETE FROM student WHERE id=?";
-    private static final String DELETE_SQL = "UPDATE student SET name=?,email=?,mobile=? WHERE id=?";
+    private static final String UPDATE_SQL = "UPDATE student SET name=?,email=?,mobile=? WHERE id=?";
+    private static final String DELETE_SQL = "DELETE FROM student WHERE id=?";
     private static final String SELECT_ALL_SQL = "SELECT * FROM student ORDER BY id";
     private static final String SELECT_BY_ID_SQL = "SELECT * FROM student WHERE id=?";
 
