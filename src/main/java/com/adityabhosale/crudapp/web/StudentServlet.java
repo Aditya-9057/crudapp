@@ -48,7 +48,13 @@ public class StudentServlet extends HttpServlet {
             }
 
         } catch (DAOException e) {
-            throw new ServletException("Unable to load students", e);
+            req.setAttribute("errorMessage", e.getMessage());
+            req.setAttribute("errorCause", e.getCause());
+            req.setAttribute("errorException", e);
+
+            e.printStackTrace(); //developers logs
+
+            req.getRequestDispatcher("error.jsp").forward(req,resp);
         }
     }
 
