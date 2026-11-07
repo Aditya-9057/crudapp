@@ -1,25 +1,51 @@
+<%@page language="java" import="com.adityabhosale.crudapp.model.Student"%>
 <html>
     <head>
         <title>MVC CRUD APPLICATION</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css">
     </head>
-    <body>
-        <h2>MVC CRUD APPLICATION</h2>
-        <h5>SERVLET + JSP + JDBC</h5>
+    <body class="container mt-4">
+        <h2 class="text-center mb-3">MVC CRUD APPLICATION</h2>
+        <h5 class="text-center mb-3">SERVLET + JSP + JDBC</h5>
 
-        <h4>Student (Add/Edit) Form</h4>
+        <%
+            Student student = (Student)request.getAttribute("student");
+            boolean isEdit = (student != null);
 
-        <form action="students?action=insert" method="post">
-            <label>Name</lable>
-            <input type="text" name="name" placeholder="Enter Name" required<br><br>
+        %>
 
-            <label>Email</lable>
-            <input type="email" name="email" placeholder="Enter Email" required<br><br>
 
-            <lable>Mobile</label>
-            <input type="text" name="mobile" placeholder="Enter Mobile " required<br><br>
 
-            <button type="submit">Save</button>
-            <a href="students">Cancel</a>
+        <h4 class="mb-4"><%= (isEdit ? "Edit" : "Add")%> Student</h4>
+
+        <form action="students?action=<%= (isEdit ? "update" : "insert")%>" method="post">
+            <%
+                if(isEdit){
+            %>
+                <input type="hidden" name="id" value="<%= student.getId()%>">
+            <%
+
+                }
+
+            %>
+
+            <div class="mb-3">
+
+            <label class="form-label">Name</lable>
+            <input type="text" name="name" class="form-control" value="<%= (student!=null ? student.getName() : "") %>" placeholder="Enter Name"
+            </div>
+
+            <div class="mb-3">
+            <label class="form-label">Email</lable>
+            <input type="email" name="email" class="form-control" value="<%= (student!=null ? student.getEmail() : "") %>" placeholder="Enter Email"
+            </div>
+
+            <div class="mb-3">
+            <label class="form-label">Mobile</label>
+            <input type="text" name="mobile" class="form-control" value="<%= (student!=null ? student.getMobile() : "") %>" placeholder="Enter Mobile "
+            </div>
+            <button type="submit" class="btn btn-success">Save</button>
+            <a href="students" class="btn btn-secondary">Cancel</a>
         </form>
     </body>
 </html>
