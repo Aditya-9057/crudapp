@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.regex.Pattern;
 
 
 @WebServlet(urlPatterns = {"/","/students"})
@@ -94,7 +95,11 @@ public class StudentServlet extends HttpServlet {
         String name = req.getParameter("name");
         String email = req.getParameter("email");
         String mobile = req.getParameter("mobile");
+        if (!validate(req,name,email,mobile)){
+            req.getRequestDispatcher("student_form.jsp").forward(req,resp);
+            return;
 
+        }
         studentDAO.insert(new Student(name.trim(),email.trim(),mobile.trim()));
         resp.sendRedirect("students?action=list&success=Inserted Successfully");
     }
@@ -105,7 +110,39 @@ public class StudentServlet extends HttpServlet {
         String email = req.getParameter("email");
         String mobile = req.getParameter("mobile");
 
+        if (!validate(req,name,email,mobile)){
+            req.setAttribute("student",new Student(id,name,email,mobile));
+            req.getRequestDispatcher("student_form.jsp").forward(req,resp);
+            return;
+
+        }
+
+
+
+
         studentDAO.update(new Student(id,name.trim(),email.trim(),mobile.trim()));
         resp.sendRedirect("students?action=list&success=Updated Successfully");
+    }
+
+    private boolean validate(HttpServletRequest req,
+                             String name, String email, String mobile) {
+        boolean valid = true;
+
+        if (name == null || !Pattern.matches("^[A-Za-z ]{3,50}$", name.trim())) {
+            req.setAttribute("nameError", "Enter a name with 3–50 letters.");
+            valid = false;
+        }
+
+        if (email == null || !Pattern.matches("^[A-Za-z0-9_.-]+@(.+)$", email.trim())) {
+            req.setAttribute("emailError", "Enter a valid email address.");
+            valid = false;
+        }
+
+        if (mobile == null || !Pattern.matches("^[0-9]{10}$", mobile.trim())) {
+            req.setAttribute("mobileError", "Enter a 10-digit mobile number.");
+            valid = false;
+        }
+
+        return valid;
     }
 }

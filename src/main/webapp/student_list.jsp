@@ -20,7 +20,7 @@
             }
         %>
 
-        <a href="students?action=add" class="btn btn-primary mb-3">
+        <a href="students?action=add" class="btn-solid theme-primary">
         <i class="fa-sharp fa-solid fa-user-plus me-1"></i> Add Student
         </a>
         <table class="table table-bordered table-striped table-hover">
