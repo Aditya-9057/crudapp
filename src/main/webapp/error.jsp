@@ -7,12 +7,14 @@
     <body class="container my-4">
         <h2 class="text danger">Something Wrong Happend!</h2>
         <h5 class="text muted mb-3">Encountered some issue processing request</h5>
-        <%
-            String errorMessage = (String)request.getAttribute("errorMessage");
-            Throwable errorMessage = (Throwable)request.getAttribute("errorCause");
-            exception = (Throwable)request.getAttribute("errorException");
-
-        %>
+       <%
+           String errorMessage =
+                   (String) request.getAttribute("errorMessage");
+           Throwable errorCause =
+                   (Throwable) request.getAttribute("errorCause");
+           Throwable errorException =
+                   (Throwable) request.getAttribute("errorException");
+       %>
         <div class="card">
             <div class="card-header bg-dark text-light">
                 Debugging Information
@@ -27,10 +29,10 @@
                         <p><strong>Root Cause</strong></p>
                         <pre><%= errorCause%></pre>
                  <%
-                    } else if(exception !=null){
+                    } else if(errorException !=null){
                  %>
                         <p><strong>Main Exception</strong></p>
-                        <pre><%= exception%></pre>
+                        <pre><%= errorException%></pre>
                  <%
                     }else{
                  %>

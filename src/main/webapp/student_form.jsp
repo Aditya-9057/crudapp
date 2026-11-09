@@ -36,7 +36,7 @@
             value="<%= (request.getParameter("name")!=null) ? request.getParameter("name"):(student!=null ? student.getName() : "") %>"
             placeholder="Enter Name"
             required
-            pattern="[A-Za-z ]"
+            pattern=pattern="[A-Za-z ]{3,50}"
             title="Name should be at least 3 to 50 characters"
             >
 

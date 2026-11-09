@@ -14,13 +14,17 @@
             String success = (String)request.getParameter("success");
             if(success != null){
         %>
-            <div class="alert alert-success text-center"><%=success%></div>
+            <div class="d-flex justify-content-center my-4">
+                <div class="alert alert-success text-center w-50 mb-0">
+                    <%= success %>
+                </div>
+            </div>
 
         <%
             }
         %>
 
-        <a href="students?action=add" class="btn-solid theme-primary">
+        <a href="students?action=add" class="btn-solid theme-primary d-inline-block my-4">
         <i class="fa-sharp fa-solid fa-user-plus me-1"></i> Add Student
         </a>
         <table class="table table-bordered table-striped table-hover">
