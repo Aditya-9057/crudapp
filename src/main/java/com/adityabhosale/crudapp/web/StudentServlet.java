@@ -3,6 +3,7 @@ package com.adityabhosale.crudapp.web;
 import com.adityabhosale.crudapp.dao.StudentDAO;
 import com.adityabhosale.crudapp.dao.StudentDAOimpl;
 import com.adityabhosale.crudapp.exception.DAOException;
+import com.adityabhosale.crudapp.model.Pagination;
 import com.adityabhosale.crudapp.model.Student;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -81,8 +82,42 @@ public class StudentServlet extends HttpServlet {
 
 
     private void listStudents(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Student> studentList = studentDAO.getAllStudents();//use model
+
+        int page = 1; //default page
+        int pageSize = 10; //default pagesize
+
+        if(req.getParameter("page") != null)
+            page = Integer.parseInt(req.getParameter("page"));
+
+        if(req.getParameter("pageSize") != null)
+            pageSize = Integer.parseInt(req.getParameter("pageSize"));
+
+
+        Pagination pagination = new Pagination(page, pageSize);
+
+        int totalRecords = studentDAO.countStudents();
+        int totalPages =(int) Math.ceil((double)totalRecords / pageSize);
+
+        if(page<1)
+            page = 1;
+        if(page>totalPages)
+            page = totalPages;
+
+        pagination.setPage(page);
+
+
+
+
+
+
+        List<Student> studentList = studentDAO.getSelectedStudents(pagination);//use model
+
+
         req.setAttribute("students",studentList);//set data for view
+        req.setAttribute("totalPages",totalPages);
+        req.setAttribute("currentPage",page);
+        req.setAttribute("pageSize",pageSize);
+        req.setAttribute("totalRecords",totalRecords);
         req.getRequestDispatcher("student_list.jsp").forward(req,resp);//call view
     }
     private void deleteStudent(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

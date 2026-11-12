@@ -1,4 +1,5 @@
 <%@page language="java" import = "java.util.*,com.adityabhosale.crudapp.model.Student"%>
+<!DOCTYPE html>
 <html>
     <head>
         <title>MVC CRUD APPLICATION</title>
@@ -27,6 +28,9 @@
         <a href="students?action=add" class="btn-solid theme-primary d-inline-block my-4">
         <i class="fa-sharp fa-solid fa-user-plus me-1"></i> Add Student
         </a>
+
+
+
         <table class="table table-bordered table-striped table-hover">
             <thead class="table-dark">
                 <tr>
@@ -80,5 +84,103 @@
             %>
             </tbody>
         </table>
+        <%
+                    int totalPages = (int)request.getAttribute("totalPages");
+                    int currentPage = (int)request.getAttribute("currentPage");
+                    int pageSize = (int)request.getAttribute("pageSize");
+                    int totalRecords =(int)request.getAttribute("totalRecords");
+
+                    int start = ((currentPage - 1) * pageSize) + 1;
+                    int end = Math.min(start + pageSize - 1,totalRecords);
+        %>
+
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+
+                    <div class="text-muted">
+                        Showing
+                        <strong><%=start%><i class="fa-sharp fa-solid fa-arrow-right"></i><%=end%></strong>
+                         of
+                        <strong><%=totalRecords%></strong>
+                    </div>
+
+                    <form action="students" class="d-flex" class="d- align-items-center">
+                       <span class="text-muted me-2">Show</span>
+                        <select name="pageSize" class="form-select form-select-sm me-2" onchange="this.form.submit()" style="width:70px;">
+                            <option value="5" <%= (pageSize==5? "selected" : "")%> >5</option>
+                            <option value="10" <%= (pageSize==10? "selected" : "")%> >10</option>
+                            <option value="20" <%= (pageSize==20? "selected" : "")%> >20</option>
+                            <option value="50" <%= (pageSize==50? "selected" : "")%> >50</option>
+                            <option value="100" <%= (pageSize==100? "selected" : "")%> >100</option>
+                            <option value="200" <%= (pageSize==200? "selected" : "")%> >200</option>
+                        </select>
+                        <span class="text-muted">entries</span>
+
+                    </form>
+
+
+
+
+                <form action="students" method="get" class="d- align-items-center">
+                    <span class="text-muted me-2">Go</span>
+
+                    <input type="hidden" name="pgeSize" value="<%=pageSize%>">
+
+                    <input type="number" name="page"
+                    min = 1
+                    max = <%=totalPages%>
+                     class="form-control form-control-sm me-2"
+                     style="width:70px;">
+                    <button class="btn btn-sm btn-primary">Go</button
+                </form>
+
+                </div>
+
+                 <% if(totalPages > 1) { %>
+                 <nav aria-label="Page navigation example">
+                          <ul class="pagination justify-content-center">
+
+                          <!-- First -->
+                           <li class="page-item <%= (currentPage==1)? "disabled" : "" %>">
+                               <a class="page-link" href="students?page=1&pageSize=<%=pageSize%>">
+                               <i class="fa-sharp fa-solid fa-backward-fast"></i>
+                               </a>
+                           </li>
+
+                          <!-- Previous -->
+                            <li class="page-item <%= (currentPage==1)? "disabled" : "" %>">
+                                <a class="page-link" href="students?page=<%= (currentPage-1)%>&pageSize=<%=pageSize%>">
+                                <i class="fa-solid fa-chevron-left"></i>
+                                </a>
+                            </li>
+
+                            <% for(int i=1;i<=totalPages;i++) { %>
+                            <li class="page-item <%= (i==currentPage)? "active" : ""%>">
+                                <a class="page-link" href="students?page=<%= i %>&pageSize=<%=pageSize%>">
+                                <%= i %>
+                                </a>
+                            </li>
+                            <% } %>
+
+
+                            <!-- Next -->
+                            <li class="page-item <%= (currentPage==totalPages)? "disabled" : "" %>">
+                                <a class="page-link" href="students?page=<%= (currentPage+1)%>&pageSize=<%=pageSize%>">
+                                <i class="fa-solid fa-chevron-right"></i>
+                                </a>
+                            </li>
+
+                            <!-- Last -->
+                             <li class="page-item <%= (currentPage==totalPages)? "disabled" : "" %>">
+                                 <a class="page-link" href="students?page=<%= totalPages %>&pageSize=<%=pageSize%>">
+                                 <i class="fa-solid fa-forward-fast"></i>
+                                 </a>
+                             </li>
+
+                          </ul>
+                 </nav>
+                 <% }%>
+
+
+
     </body>
 </html

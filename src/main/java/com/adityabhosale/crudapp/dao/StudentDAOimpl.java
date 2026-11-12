@@ -1,6 +1,7 @@
 package com.adityabhosale.crudapp.dao;
 
 import com.adityabhosale.crudapp.exception.DAOException;
+import com.adityabhosale.crudapp.model.Pagination;
 import com.adityabhosale.crudapp.model.Student;
 import com.adityabhosale.crudapp.utils.JDBCUtils;
 
@@ -15,8 +16,12 @@ public class StudentDAOimpl implements StudentDAO {
     private static final String INSERT_SQL = "INSERT INTO student(name,email,mobile) VALUES(?,?,?)";
     private static final String UPDATE_SQL = "UPDATE student SET name=?,email=?,mobile=? WHERE id=?";
     private static final String DELETE_SQL = "DELETE FROM student WHERE id=?";
-    private static final String SELECT_ALL_SQL = "SELECT * FROM student ORDER BY id";
+   private static final String SELECT_ALL_SQL = "SELECT * FROM student ORDER BY id";
     private static final String SELECT_BY_ID_SQL = "SELECT * FROM student WHERE id=?";
+    private static final String BASE_SELECT_SQL = "SELECT id,name,email,mobile FROM student";
+    private static final String PAGINATION_SQL = " LIMIT ? OFFSET ?";
+    private static final String COUNT_SQL = "SELECT COUNT(*) FROM student";
+
 
 
 
@@ -108,20 +113,29 @@ public class StudentDAOimpl implements StudentDAO {
     }
 
     @Override
-    public List<Student> getAllStudents() {
+    public List<Student> getSelectedStudents(Pagination pagination) {
         List<Student> students = new ArrayList<>();
+
+        String sql = BASE_SELECT_SQL + PAGINATION_SQL;//select * from student limit ? offset ?
+
         try(Connection con = JDBCUtils.fetchConnection();
-            PreparedStatement ps = con.prepareStatement(SELECT_ALL_SQL);
-            ResultSet rs = ps.executeQuery()){
+            PreparedStatement ps = con.prepareStatement(sql)){
 
-            while(rs.next()){
-                Student student = new Student();
-                student.setId(rs.getInt("id"));
-                student.setName(rs.getString("name"));
-                student.setEmail(rs.getString("email"));
-                student.setMobile(rs.getString("mobile"));
+            ps.setInt(1,pagination.getPageSize());
+            ps.setInt(2,pagination.getOffset());
 
-                students.add(student);
+            try(ResultSet rs = ps.executeQuery()) {
+
+                while (rs.next()) {
+                    Student student = new Student();
+                    student.setId(rs.getInt("id"));
+                    student.setName(rs.getString("name"));
+                    student.setEmail(rs.getString("email"));
+                    student.setMobile(rs.getString("mobile"));
+
+                    students.add(student);
+                }
+
             }
 
 
@@ -131,5 +145,20 @@ public class StudentDAOimpl implements StudentDAO {
 
         }
         return students;
+    }
+    public int countStudents() {
+        try(Connection con = JDBCUtils.fetchConnection();
+            PreparedStatement ps = con.prepareStatement(COUNT_SQL);
+            ResultSet rs = ps.executeQuery()){
+
+            if(rs.next()){
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+
+            throw new DAOException("Failed to Count Student",e);
+        }
+        return 0;
     }
 }

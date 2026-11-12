@@ -1,5 +1,6 @@
 package com.adityabhosale.crudapp.dao;
 
+import com.adityabhosale.crudapp.model.Pagination;
 import com.adityabhosale.crudapp.model.Student;
 
 import java.sql.SQLException;
@@ -10,5 +11,6 @@ public interface StudentDAO {
     void update(Student student);
     void delete(int id);
     Student getStudentById(int id);
-    List<Student> getAllStudents();
+    List<Student> getSelectedStudents(Pagination pagination);
+    int countStudents();
 }
