@@ -16,3 +16,12 @@ INSERT INTO student(name,email,mobile) VALUES('Adit bhosale','adit@gmail.com','1
 INSERT INTO student(name,email,mobile) VALUES('Aditya bhosale','aditya@gmail.com','1234567898');
 
 SELECT * FROM student;
+
+CREATE TABLE users(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    mobile VARCHAR(10) NOT NULL,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+
+);
